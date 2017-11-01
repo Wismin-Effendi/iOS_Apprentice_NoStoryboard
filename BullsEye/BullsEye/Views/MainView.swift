@@ -12,7 +12,7 @@ class MainView: UIView {
 
     let backgroundImageView = UIImageView()
     let hitMeButton = UIButton(type: UIButtonType.custom)
-    let infoButton = UIButton(type: UIButtonType.infoLight)
+    let infoButton = UIButton(type: UIButtonType.custom)
     let roundLabel = UILabel()
     let titleRoundLabel = UILabel()
     let startOverButton = UIButton(type: UIButtonType.system)
@@ -54,6 +54,8 @@ class MainView: UIView {
         // Hit Me! button
         self.addSubview(hitMeButton)
         hitMeButton.setBackgroundImage(#imageLiteral(resourceName: "Button-Normal"), for: .normal)
+        hitMeButton.setBackgroundImage(#imageLiteral(resourceName: "Button-Highlighted"), for: .highlighted)
+        hitMeButton.reversesTitleShadowWhenHighlighted = true
         hitMeButton.setTitle("Hit Me!", for: .normal)
         let titleColor = UIColor(red: 96/255, green: 30/255, blue: 0, alpha: 1.0)
         hitMeButton.setTitleColor(titleColor, for: .normal)
@@ -72,10 +74,16 @@ class MainView: UIView {
         
         // light info button
         self.addSubview(infoButton)
+        infoButton.setImage(#imageLiteral(resourceName: "InfoButton"), for: .normal)
+        infoButton.setBackgroundImage(#imageLiteral(resourceName: "SmallButton"), for: .normal)
         infoButton.translatesAutoresizingMaskIntoConstraints = false
-        infoButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -32).isActive = true
-        infoButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -32).isActive = true
-        
+        NSLayoutConstraint.activate([
+            infoButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -32),
+            infoButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -32),
+            infoButton.widthAnchor.constraint(equalToConstant: 32),
+            infoButton.heightAnchor.constraint(equalToConstant: 32)
+            ])
+
         // # of round label
         self.addSubview(roundLabel)
         roundLabel.textAlignment = .right
@@ -110,10 +118,16 @@ class MainView: UIView {
         // startOver button
         // light info button
         self.addSubview(startOverButton)
-        startOverButton.setTitle("Start Over", for: .normal)
+        startOverButton.setImage(#imageLiteral(resourceName: "StartOverIcon"), for: .normal)
+        startOverButton.setBackgroundImage(#imageLiteral(resourceName: "SmallButton"), for: .normal)
         startOverButton.translatesAutoresizingMaskIntoConstraints = false
-        startOverButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 32).isActive = true
-        startOverButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -28).isActive = true
+        NSLayoutConstraint.activate([
+            startOverButton.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 32),
+            startOverButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -28),
+            startOverButton.widthAnchor.constraint(equalToConstant: 32),
+            startOverButton.heightAnchor.constraint(equalToConstant: 32)
+        ])
+
         startOverButton.addTarget(vc, action: #selector(ViewController.startNewGame), for: .touchUpInside)
         
         // Score label and score value label
