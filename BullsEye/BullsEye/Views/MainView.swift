@@ -11,7 +11,7 @@ import UIKit
 class MainView: UIView {
 
     let backgroundImageView = UIImageView()
-    let hitMeButton = UIButton(type: UIButtonType.system)
+    let hitMeButton = UIButton(type: UIButtonType.custom)
     let infoButton = UIButton(type: UIButtonType.infoLight)
     let roundLabel = UILabel()
     let titleRoundLabel = UILabel()
@@ -53,14 +53,21 @@ class MainView: UIView {
         
         // Hit Me! button
         self.addSubview(hitMeButton)
+        hitMeButton.setBackgroundImage(#imageLiteral(resourceName: "Button-Normal"), for: .normal)
         hitMeButton.setTitle("Hit Me!", for: .normal)
-        hitMeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        hitMeButton.backgroundColor = .green
-        hitMeButton.layer.masksToBounds = true
-        hitMeButton.layer.cornerRadius = 5
+        let titleColor = UIColor(red: 96/255, green: 30/255, blue: 0, alpha: 1.0)
+        hitMeButton.setTitleColor(titleColor, for: .normal)
+        hitMeButton.titleLabel?.shadowColor = UIColor(white: 1.0, alpha: 0.5)
+        hitMeButton.titleLabel?.shadowOffset = CGSize(width: 0, height: 1)
+        hitMeButton.titleLabel?.font = UIFont(name: "Arial Rounded MT Bold", size: 20)
         hitMeButton.translatesAutoresizingMaskIntoConstraints = false
-        hitMeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        hitMeButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            hitMeButton.widthAnchor.constraint(equalToConstant: 100),
+            hitMeButton.heightAnchor.constraint(equalToConstant: 37),
+            hitMeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            hitMeButton.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 20)
+        ])
+
         hitMeButton.addTarget(vc, action: #selector(ViewController.buttonTapped(_:)), for: .touchUpInside)
         
         // light info button
