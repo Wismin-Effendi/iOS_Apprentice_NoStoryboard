@@ -83,6 +83,7 @@ class MainView: UIView {
             infoButton.widthAnchor.constraint(equalToConstant: 32),
             infoButton.heightAnchor.constraint(equalToConstant: 32)
             ])
+        infoButton.addTarget(vc, action: #selector(ViewController.showAboutVC), for: .touchUpInside)
 
         // # of round label
         self.addSubview(roundLabel)
@@ -165,6 +166,22 @@ class MainView: UIView {
         slider.maximumValue = 100.0
         slider.setValue(27, animated: true)
         slider.isContinuous = true
+        
+        let thumbImageNormal = #imageLiteral(resourceName: "SliderThumb-Normal")
+        slider.setThumbImage(thumbImageNormal, for: .normal)
+        
+        let thumbImageHightlighted = #imageLiteral(resourceName: "SliderThumb-Highlighted")
+        slider.setThumbImage(thumbImageHightlighted, for: .highlighted)
+        
+        let insets = UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 14)
+        
+        let trackLeftImage = #imageLiteral(resourceName: "SliderTrackLeft")
+        let trackLeftResizable = trackLeftImage.resizableImage(withCapInsets: insets)
+        slider.setMinimumTrackImage(trackLeftResizable, for: .normal)
+        let trackRightImage = #imageLiteral(resourceName: "SliderTrackRight")
+        let trackRightResizable = trackRightImage.resizableImage(withCapInsets: insets)
+        slider.setMaximumTrackImage(trackRightResizable, for: .normal)
+        
         slider.addTarget(vc, action: #selector(ViewController.sliderMoved(_:)), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

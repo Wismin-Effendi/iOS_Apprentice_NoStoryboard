@@ -20,6 +20,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        modalTransitionStyle = .flipHorizontal
+        modalPresentationStyle = .fullScreen
+        
         view.addSubview(mainView)
         mainView.translatesAutoresizingMaskIntoConstraints = false
         mainView.topAnchor.constraintEqualToSystemSpacingBelow(view.topAnchor, multiplier: 1).isActive = true
@@ -45,6 +48,11 @@ class ViewController: UIViewController {
         round = 0
         score = 0
         startNewRound()
+    }
+    
+    @objc func showAboutVC() {
+        print("going to show aboutVC")
+        present(AboutViewController(), animated: true, completion: nil)
     }
 
     func startNewRound() {
