@@ -14,6 +14,7 @@ class AboutView:UIView {
 
     let closeButton = UIButton()
     let textView = UITextView()
+    let webView = UIWebView()
     
     var vc: AboutViewController!
     
@@ -41,28 +42,7 @@ class AboutView:UIView {
             ])
     }
     
-    func setupViews() {
-        
-        // close button at the bottom
-        self.addSubview(closeButton)
-        closeButton.setBackgroundImage(#imageLiteral(resourceName: "Button-Normal"), for: .normal)
-        closeButton.setBackgroundImage(#imageLiteral(resourceName: "Button-Highlighted"), for: .highlighted)
-        closeButton.reversesTitleShadowWhenHighlighted = true
-        closeButton.setTitle("Close", for: .normal)
-        let titleColor = UIColor(red: 96/255, green: 30/255, blue: 0, alpha: 1.0)
-        closeButton.setTitleColor(titleColor, for: .normal)
-        closeButton.titleLabel?.font = UIFont(name: "Arial Rounded MT Bold", size: 20)
-        closeButton.titleLabel?.shadowColor = UIColor(white: 1.0, alpha: 0.5)
-        closeButton.titleLabel?.shadowOffset = CGSize(width: 0, height: 1)
-        closeButton.addTarget(vc, action: #selector(AboutViewController.close), for: .touchUpInside)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            closeButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
-            closeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            closeButton.heightAnchor.constraint(equalToConstant: 40),
-            closeButton.widthAnchor.constraint(equalToConstant: 80)
-        ])
-        
+    fileprivate func setupTextView() {
         // text view
         self.addSubview(textView)
         textView.isEditable = false
@@ -86,8 +66,47 @@ class AboutView:UIView {
             textView.topAnchor.constraint(equalTo: self.topAnchor),
             textView.leftAnchor.constraint(equalTo: self.leftAnchor),
             textView.rightAnchor.constraint(equalTo: self.rightAnchor)
-        ])
+            ])
+    }
+    
+    fileprivate func setupCloseButton() {
+        // close button at the bottom
+        self.addSubview(closeButton)
+        closeButton.setBackgroundImage(#imageLiteral(resourceName: "Button-Normal"), for: .normal)
+        closeButton.setBackgroundImage(#imageLiteral(resourceName: "Button-Highlighted"), for: .highlighted)
+        closeButton.reversesTitleShadowWhenHighlighted = true
+        closeButton.setTitle("Close", for: .normal)
+        let titleColor = UIColor(red: 96/255, green: 30/255, blue: 0, alpha: 1.0)
+        closeButton.setTitleColor(titleColor, for: .normal)
+        closeButton.titleLabel?.font = UIFont(name: "Arial Rounded MT Bold", size: 20)
+        closeButton.titleLabel?.shadowColor = UIColor(white: 1.0, alpha: 0.5)
+        closeButton.titleLabel?.shadowOffset = CGSize(width: 0, height: 1)
+        closeButton.addTarget(vc, action: #selector(AboutViewController.close), for: .touchUpInside)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            closeButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
+            closeButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            closeButton.heightAnchor.constraint(equalToConstant: 40),
+            closeButton.widthAnchor.constraint(equalToConstant: 80)
+            ])
+    }
+    
+    func setupViews() {
         
+        setupCloseButton()
+        
+        // setupTextView()
+        
+        
+        // setup WebView
+        self.addSubview(webView)
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            webView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -20),
+            webView.topAnchor.constraint(equalTo: self.topAnchor),
+            webView.leftAnchor.constraint(equalTo: self.leftAnchor),
+            webView.rightAnchor.constraint(equalTo: self.rightAnchor)
+            ])
     }
 
 }

@@ -16,6 +16,13 @@ class AboutViewController: UIViewController {
         super.viewDidLoad()
         
         aboutView.vc = self
+        
+        if let url = Bundle.main.url(forResource: "BullsEye", withExtension: "html"),
+            let htmlData = try? Data.init(contentsOf: url) {
+            let baseURL = URL(fileURLWithPath: Bundle.main.bundlePath)
+            aboutView.webView.load(htmlData, mimeType: "text/html", textEncodingName: "UTF-8", baseURL: baseURL)
+        }
+        
         print("inside view didLoad of About VC")
         view.addSubview(aboutView)
         aboutView.translatesAutoresizingMaskIntoConstraints = false
