@@ -21,3 +21,10 @@ class ChecklistItem {
         checked = !checked
     }
 }
+
+extension ChecklistItem: Equatable {
+    static func ==(lhs: ChecklistItem, rhs: ChecklistItem) -> Bool {
+        return lhs.text == rhs.text && lhs.checked == rhs.checked
+    }
+    
+}

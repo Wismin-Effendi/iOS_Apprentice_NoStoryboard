@@ -8,13 +8,16 @@
 
 import UIKit
 
-protocol AddItemViewControllerDelegate: class {
-    func addItemViewControllerDidCancel(_ controller: AddItemViewController)
-    func addItemViewController(_ controller: AddItemViewController,
+protocol ItemDetailViewControllerDelegate: class {
+    func itemDetailViewControllerDidCancel(_ controller: ItemDetailViewController)
+    func itemDetailViewController(_ controller: ItemDetailViewController,
                                didFinishAdding item: ChecklistItem)
+    func itemDetailViewController(_ controller: ItemDetailViewController,
+                               didFinishEditing item: ChecklistItem)
 }
+    
 
-class AddItemViewController: UITableViewController {
+class ItemDetailViewController: UITableViewController {
 
     var doneBarButton: UIBarButtonItem!
     var itemNameCell: UITableViewCell = UITableViewCell()
@@ -23,7 +26,9 @@ class AddItemViewController: UITableViewController {
     var spareCell: UITableViewCell = UITableViewCell()
     var spareNameText: UITextField = UITextField()
     
-    weak var delegate: AddItemViewControllerDelegate?
+    weak var delegate: ItemDetailViewControllerDelegate?
+    
+    var itemToEdit: ChecklistItem?
     
     override func loadView() {
         super.loadView()
@@ -44,25 +49,38 @@ class AddItemViewController: UITableViewController {
         self.spareCell.addSubview(self.spareNameText)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        navigationItem.largeTitleDisplayMode = .never
-       
-        // navigationItem.title = "Add Item"
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
-        doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
-        doneBarButton.isEnabled = false
-        navigationItem.rightBarButtonItem = doneBarButton
-        
+    fileprivate func configureItemNameText() {
         itemNameText.delegate = self
         itemNameText.font = UIFont.systemFont(ofSize: 17)
         itemNameText.adjustsFontSizeToFitWidth = false
         itemNameText.autocapitalizationType = .sentences
         itemNameText.returnKeyType = .done
         itemNameText.enablesReturnKeyAutomatically = true
-        itemNameText.addTarget(self, action: #selector(AddItemViewController.done), for: .editingDidEndOnExit)
+        itemNameText.addTarget(self, action: #selector(ItemDetailViewController.done), for: .editingDidEndOnExit)
+    }
+    
+    fileprivate func configureNavigationBar() {
+        // navigationItem.title = "Add Item"
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        doneBarButton.isEnabled = false
+        navigationItem.rightBarButtonItem = doneBarButton
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        navigationItem.largeTitleDisplayMode = .never
+       
+        configureNavigationBar()
+        configureItemNameText()
+        
+        if let item = itemToEdit {
+            title = "Edit Item"
+            itemNameText.text = item.text
+            doneBarButton.isEnabled = true
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -71,13 +89,17 @@ class AddItemViewController: UITableViewController {
     }
     
     @objc func cancel() {
-        delegate?.addItemViewControllerDidCancel(self)
+        delegate?.itemDetailViewControllerDidCancel(self)
     }
     
     @objc func done() {
+        if let itemToEdit = itemToEdit {
+            itemToEdit.text = itemNameText.text!
+            delegate?.itemDetailViewController(self, didFinishEditing: itemToEdit)
+        } else {
         let item = ChecklistItem(text: itemNameText.text!, checked: false)
-        
-        delegate?.addItemViewController(self, didFinishAdding: item)
+        delegate?.itemDetailViewController(self, didFinishAdding: item)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -126,7 +148,7 @@ class AddItemViewController: UITableViewController {
 }
 
 
-extension AddItemViewController: UITextFieldDelegate {
+extension ItemDetailViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
