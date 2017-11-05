@@ -12,14 +12,18 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    let dataModel = DataModel()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        window?.rootViewController = UINavigationController(rootViewController: ChecklistViewController())
+        let navVC = UINavigationController(rootViewController: AllListsViewController())
+        let controller = navVC.viewControllers[0] as! AllListsViewController
+        controller.dataModel = dataModel
+        
+        window?.rootViewController = navVC
         
         return true
     }
@@ -32,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        saveData()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -44,8 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        saveData()
     }
-
 
 }
 
@@ -53,6 +58,12 @@ extension UIApplicationDelegate {
     
     static var shared: Self {
         return UIApplication.shared.delegate as! Self
+    }
+}
+
+extension AppDelegate {
+    func saveData() {
+        dataModel.saveChecklists()
     }
 }
 
